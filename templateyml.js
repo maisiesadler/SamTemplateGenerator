@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 function readYmlTemplate(templatePath, template) {
-    let fileContents = fs.readFileSync(`${templatePath}/templateyml/${template}.yml`, 'utf8');
+    let fileContents = fs.readFileSync(`${templatePath}/${template}.yml`, 'utf8');
     return fileContents;
 }
 
