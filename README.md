@@ -7,6 +7,9 @@ Expects folder structure to match the desired API Gateway structure.
 
 For example to create an API Gateway with a GET resource at path `/biscuits`, add the handler to the function at `biscuits/get`. A PUT would then go at `biscuits/put`.
 
+![image](images/folder.png)
+![image](images/apigateway.png)
+
 ## Outputs
 
 govet_gotest.sh
