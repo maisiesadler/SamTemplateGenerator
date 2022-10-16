@@ -31,6 +31,9 @@ function generate(templatePath, lambdaDefinitions) {
         const handler = /(\/\w+)$/g.exec(localRelativePath)[1]
 
         let template = functionTemplate;
+        if (definition.overrideTemplate) {
+            template = readYmlTemplate(templatePath, definition.overrideTemplate)
+        }
         template = replaceProperty(template, 'Name', clean);
         template = replaceProperty(template, 'CodeUri', codeUri);
         template = replaceProperty(template, 'Handler', handler);

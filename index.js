@@ -25,15 +25,34 @@ function readLambdaDefinition(localPath, localRelativePath, relativePath, dir) {
 
     const directoryContents = fs.readdirSync(localPath);
 
+    let hasOverrideFile = false
+    let overrideTemplate = null
     let hasGoFiles = false;
     directoryContents.forEach(file => {
         if (extension(file) == 'go') {
             hasGoFiles = true;
         }
+        if (file === '.templategen') {
+            hasOverrideFile = true;
+        }
     });
 
     if (!hasGoFiles) {
         console.log(`Http path does not have go files: ${localRelativePath}`);
+    }
+
+    if (hasOverrideFile) {
+        const overrideFileContents = fs.readFileSync(localPath + '.templategen', 'utf8');
+        const overrides = {}
+        overrideFileContents.split('\n')
+            .forEach(line => {
+                const spl = line.split('=')
+                if (spl.length >= 2)
+                    overrides[spl[0]] = spl[1]
+            })
+
+        if (!!overrides['template'])
+            overrideTemplate = overrides['template']
     }
 
     const urlPath = relativePath
@@ -46,6 +65,7 @@ function readLambdaDefinition(localPath, localRelativePath, relativePath, dir) {
         method: dir,
         urlPath,
         hasGoFiles,
+        overrideTemplate
     }
 }
 
@@ -77,7 +97,7 @@ module.exports = function (templatePath, localBasePath, outputDirectory) {
     if (localBasePath[localBasePath.length - 1] != '/') {
         localBasePath += '/';
     }
-    
+
     const relativePath = '/';
     traverseDirectory(localBasePath, relativePath);
 
